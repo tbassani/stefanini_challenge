@@ -1,0 +1,20 @@
+{
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "arrowParens": "avoid",
+  "parser": "typescript",
+  "endOfLine":"auto",
+  "overrides": [
+    {
+      "files": ["*.json", ".*rc"],
+      "options": {
+        "parser": "json"
+      }
+    }
+  ]
+}
