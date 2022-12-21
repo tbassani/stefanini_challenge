@@ -6,21 +6,12 @@ import client from './src/services/api'
 import { ImgItem } from './src/types'
 
 const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: 10,
-    flex: 1,
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
   listContainer: {
     flex: 1,
     flexDirection: 'column',
   },
   list: {
     justifyContent: 'space-around',
-  },
-  column: {
-    flexShrink: 1,
   },
 })
 
@@ -54,7 +45,6 @@ const App = () => {
   }, [])
 
   const renderItem: ListRenderItem<ImgItem> = ({ item }) => {
-    console.log(item.link)
     return <Card src={item.link} key={item.id} />
   }
 
