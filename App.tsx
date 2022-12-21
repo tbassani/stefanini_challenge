@@ -58,6 +58,7 @@ const App = () => {
       columnWrapperStyle={{
         justifyContent: 'space-between',
       }}
+      removeClippedSubviews
     />
   )
 
