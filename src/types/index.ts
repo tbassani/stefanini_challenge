@@ -5,5 +5,10 @@ export interface ImgItem {
     id: React.Key | null | undefined
     type: string
     is_album: boolean
-    images: any[]
+    images?: {
+        link: string
+        id: React.Key | null | undefined
+        type: string
+        is_album: false
+    }[]
 }

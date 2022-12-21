@@ -24,7 +24,7 @@ const App = () => {
       loadedImgs.data.data.forEach(item => {
         //If it's an album, get the images inside
         if (item.is_album) {
-          item.images.forEach(img => {
+          item.images?.forEach(img => {
             //Make sure it's an image and not a gif or video
             if (img.type === 'image/jpeg' || img.type === 'image/png') {
               imgArray.push(img)
