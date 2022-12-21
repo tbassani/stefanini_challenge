@@ -1,5 +1,7 @@
 import React from 'react'
-import { Image, ImageProps, StyleSheet, View } from 'react-native'
+import { ImageProps, StyleSheet, View } from 'react-native'
+
+import FastImage from 'react-native-fast-image'
 
 const styles = StyleSheet.create({
   container: {
@@ -21,7 +23,7 @@ interface CardProps extends ImageProps {
 export const Card: React.FC<CardProps> = ({ ...props }) => {
   return (
     <View style={styles.container}>
-      <Image style={styles.img} source={{ uri: props.src }} />
+      <FastImage style={styles.img} source={{ uri: props.src }} />
     </View>
   )
 }
