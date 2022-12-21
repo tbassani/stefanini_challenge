@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
 })
 
-interface CardProps extends ImageProps {
+interface CardProps {
   src: string
 }
 
