@@ -1,5 +1,5 @@
 import React from 'react'
-import { ImageProps, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import FastImage from 'react-native-fast-image'
 
