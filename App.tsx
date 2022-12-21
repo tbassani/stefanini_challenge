@@ -1,120 +1,77 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
+import React, { useEffect, useState } from 'react'
+import { View, StyleSheet, FlatList, ListRenderItem } from 'react-native'
+import { Card } from './src/components/Card'
 
-import React, {type PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section: React.FC<
-  PropsWithChildren<{
-    title: string;
-  }>
-> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+import client from './src/services/api'
+import { ImgItem } from './src/types'
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    marginHorizontal: 10,
+    flex: 1,
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  listContainer: {
+    flex: 1,
+    flexDirection: 'column',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  list: {
+    justifyContent: 'space-around',
   },
-  highlight: {
-    fontWeight: '700',
+  column: {
+    flexShrink: 1,
   },
-});
+})
 
-export default App;
+const App = () => {
+  const [imgs, setImgs] = useState<ImgItem[]>([])
+  useEffect(() => {
+    const onLoad = async () => {
+      const loadedImgs = await client.request()
+      const imgArray: ImgItem[] = []
+      loadedImgs.data.data.forEach(item => {
+        //If it's an album, get the images inside
+        if (item.is_album) {
+          item.images.forEach(img => {
+            //Make sure it's an image and not a gif or video
+            if (img.type === 'image/jpeg' || img.type === 'image/png') {
+              imgArray.push(img)
+            }
+          })
+        } else {
+          //If not an album, just get the image
+          //Make sure it's an image and not a gif or video
+          if (item.type === 'image/jpeg' || item.type === 'image/png')
+            imgArray.push(item)
+        }
+      })
+
+      setImgs(imgArray)
+    }
+
+    onLoad()
+  }, [])
+
+  const renderItem: ListRenderItem<ImgItem> = ({ item }) => {
+    console.log(item.link)
+    return <Card src={item.link} key={item.id} />
+  }
+
+  const listContent = (
+    <FlatList
+      data={imgs}
+      renderItem={renderItem}
+      numColumns={4}
+      style={styles.listContainer}
+      contentContainerStyle={styles.list}
+      columnWrapperStyle={{
+        justifyContent: 'space-between',
+      }}
+    />
+  )
+
+  return <View style={{ flex: 1 }}>{listContent}</View>
+}
+
+export default App
